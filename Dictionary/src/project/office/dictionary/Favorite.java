@@ -31,7 +31,6 @@ public class Favorite extends DrawerActivity {
 
         cursor = G.cmd.selectFavorite();
         notifyListView();
-		//first comment
     }
 
 
@@ -52,7 +51,7 @@ public class Favorite extends DrawerActivity {
 
             structArray.add(struct);
         }
-//second comment
+
         adapter = new AdapterFavorite(structArray, Favorite.this);
         lstFavorite.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -65,5 +64,4 @@ public class Favorite extends DrawerActivity {
         startActivity(intent);
         finish();
     }
-	//third comment
 }

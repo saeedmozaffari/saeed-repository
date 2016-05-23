@@ -21,8 +21,6 @@ import project.office.dictionary.tools.Struct;
 
 public class UserWords extends DrawerActivity {
 
-//ccccccccccccccccc
-
     private ArrayAdapter                   adapter;
     private ArrayList<Struct>              structArray = new ArrayList<Struct>();
     private Cursor                         cursor;

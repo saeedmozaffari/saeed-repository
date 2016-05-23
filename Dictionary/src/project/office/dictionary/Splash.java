@@ -18,7 +18,7 @@ public class Splash extends Activity {
         TextView txtWelcome = (TextView) findViewById(R.id.txtWelcom);
 
         txtWelcome.setTypeface(G.persianFont);
-//onback press cleard
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
 
@@ -35,5 +35,8 @@ public class Splash extends Activity {
     }
 
 
-    
+    @Override
+    public void onBackPressed() {
+        // do nothing
+    }
 }
