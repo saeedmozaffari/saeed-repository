@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/lytMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
+
+        <project.office.dictionary.tools.ImageWithShape
+            android:id="@+id/imageWithShape1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/lytAlign"
+            android:src="@color/b1" />
+
+        <LinearLayout
+            android:id="@+id/LinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/txtLang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="fa"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtMeaning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="معنی"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LinearLayout2"
+            android:layout_marginTop="8dp"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/txtPosOrg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="posOrg"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt"
+                android:visibility="invisible" />
+
+            <View
+                android:id="@+id/View02"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtPos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="pos"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/LinearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LinearLayout3"
+            android:layout_marginTop="8dp"
+            android:padding="5dp" >
+
+            <TextView
+                android:id="@+id/txtPron"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="pronounciation"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt"
+                android:visibility="invisible" />
+
+            <View
+                android:id="@+id/View01"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txtIpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ipa"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytExample"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/LinearLayout4"
+            android:layout_marginTop="12dp"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/txtExample"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="مثال"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+
+            <TextView
+                android:id="@+id/txtExampleDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="متن مثال"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytIdiom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lytExample"
+            android:layout_marginTop="12dp"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/txtIdiom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="اصطلاح"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+
+            <TextView
+                android:id="@+id/txtIdiomDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="متن اصطلاح"
+                android:textColor="@color/white"
+                android:textSize="@dimen/nt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lytAlign"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/lytIdiom"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,67 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <style name="AppThemeSmall" parent="AppBaseTheme">
+
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:actionBarSize">45dp</item>
+        <item name="actionBarSize">45dp</item>
+        <item name="android:actionBarStyle">@style/MyActionBarSmall</item>
+        <item name="actionBarStyle">@style/MyActionBarSmall</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="MyActionBarSmall" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/actionbar</item>
+        <item name="background">@color/actionbar</item>
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyleSmall</item>
+        <item name="android:subtitleTextStyle">@style/MyTheme.ActionBar.TitleTextStyleSmall</item>
+        <item name="titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyleSmall</item>
+        <item name="subtitleTextStyle">@style/MyTheme.ActionBar.TitleTextStyleSmall</item>
+    </style>
+
+    <style name="MyTheme.ActionBar.TitleTextStyleSmall" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/actionbar</item>
+        <item name="background">@color/actionbar</item>
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+        <item name="android:subtitleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+        <item name="titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    
+      <style name="Theme.Transparent" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+</resources>
