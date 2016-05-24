@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/lytNotification"
+        android:layout_width="match_parent"
+        android:layout_height="65dip"
+        android:background="@drawable/notif_image_gray"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/imgNotification"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_margin="10dip"
+            android:background="@drawable/wifi_white" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:background="#dddddd" />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginBottom="3dip"
+                android:layout_marginLeft="8dip"
+                android:text="TextView"
+                android:textColor="#3f3f3f" />
+
+            <TextView
+                android:id="@+id/txtUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginBottom="3dip"
+                android:layout_marginLeft="8dip"
+                android:text="TextView"
+                android:textColor="#3f3f3f" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/refresh_white" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Drawer Items Start -->
+    <string-array name="items">
+        <item>ریز مصرف</item>
+        <item>مصرف هر wifi</item>
+        <item>تعیین محدودیت</item>
+        <item>حذف اطلاعات</item>
+        <item>تنظیم ساعت</item>
+        <item>درباره ما</item>
+        <item>خروج</item>
+    </string-array>
+    <!-- Drawer Items End -->
+
+    <string name="app_name">InternetUsing</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_bar_title">ActionBar Title</string>
+    <string name="drawer_title">title</string>
+    
+    <!-- layout strings -->
+    <string name="drawer_nav_head">Nav Head</string>
+    <string name="drawer_head_title">drawer title</string>
+    
+    <!-- text -->
+    <string name="activity_main_last_use">آخرین مصرف</string>
+    <string name="activity_main_last_time">آخرین مدت اتصال</string>
+    <string name="activity_main_last_date">آخرین تاریخ اتصال</string>
+    <string name="activity_main_last_wifi_name">آخرین شبکه مورد استفاده</string>
+    <string name="activity_main_most_use">بیشترین میزان مصرف در یک اتصال</string>
+    <string name="activity_main_all_time">مدت کلی اتصال</string>
+    <string name="activity_main_most_use_from_wifi">بیشترین میزان مصرف از یک شبکه</string>
+    <string name="activity_main_second">ثانیه</string>
+    <string name="activity_main_minute">دقیقه و</string>
+    <string name="activity_main_hour">ساعت و</string>
+
+</resources>

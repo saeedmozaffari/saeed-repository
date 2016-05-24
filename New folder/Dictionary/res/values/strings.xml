@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">لغت نامه</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="welcome">دیکشنری حس</string>
+    <string name="drawer_title">لغت نامه</string>
+
+    <string-array name="items">
+        <item>صفحه اصلی</item>
+        <item>علاقه مندیها</item>
+        <item>بیشترین بازدید</item>
+        <item>لغات کاربر</item>
+        <item>درباره ما</item>
+        <item>خروج</item>
+    </string-array>
+
+    <string name="title_activity_startup">لغت نامه</string>
+    <string name="title_activity_favorite">علاقه مندیها</string>
+    <string name="title_activity_final_page">اطلاعات لغت</string>
+    <string name="visit">تعداد بازدید شما از این لغت</string>
+    <string name="title_activity_visit_sort">بیشترین بازدید</string>
+    <string name="title_activity_about">درباره ما</string>
+    <string name="title_activity_user_words">لغات کاربر</string>
+    <string name="title_activity_splash">لغت نامه</string>
+    <string name="about">دانشگاه پیام نور مرکز شهر ری \n\n\n استاد : خانم نصیری \n\n\n پروژه دانشجویی : لغت نامه \n\n\n  برنامه نویس : سعید مظفری </string>
+
+    <!-- Toasts -->
+    <string name="toast_exit">برای خروج مجددا دکمه را بزنید</string>
+    <string name="toast_tts">برای انجام این عملکرد نرم افزار Google Text-to-speech Engine را نصب نمایید</string>
+
+    <!-- Hint String -->
+    <string name="enter_word">لغت مورد نظر را وارد نمایید</string>
+
+</resources>
