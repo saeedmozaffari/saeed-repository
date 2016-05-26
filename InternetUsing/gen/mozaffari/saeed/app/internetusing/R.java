@@ -1709,7 +1709,7 @@ containing a value of this type.
         public static final int wood=0x7f020048;
     }
     public static final class id {
-        public static final int ImageView01=0x7f090058;
+        public static final int ImageView01=0x7f09005b;
         public static final int LinearLayout1=0x7f090043;
         public static final int action_bar=0x7f090031;
         public static final int action_bar_activity_content=0x7f090003;
@@ -1724,11 +1724,11 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f09002e;
         public static final int action_mode_bar_stub=0x7f09002d;
         public static final int action_mode_close_button=0x7f090020;
-        public static final int action_settings=0x7f09005c;
+        public static final int action_settings=0x7f09005f;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
-        public static final int btnRefresh=0x7f09005b;
+        public static final int btnRefresh=0x7f09005e;
         public static final int checkbox=0x7f090029;
         public static final int collapseActionView=0x7f090015;
         public static final int content_frame=0x7f090041;
@@ -1747,13 +1747,13 @@ containing a value of this type.
         public static final int icon=0x7f090026;
         public static final int ifRoom=0x7f090016;
         public static final int image=0x7f090023;
-        public static final int imgDrawer=0x7f090053;
-        public static final int imgNotification=0x7f090057;
-        public static final int img_head=0x7f090054;
+        public static final int imgDrawer=0x7f090056;
+        public static final int imgNotification=0x7f09005a;
+        public static final int img_head=0x7f090057;
         public static final int left_drawer=0x7f090042;
         public static final int listMode=0x7f09000a;
         public static final int list_item=0x7f090025;
-        public static final int lytNotification=0x7f090056;
+        public static final int lytNotification=0x7f090059;
         public static final int middle=0x7f09001d;
         public static final int mytext=0x7f09003f;
         public static final int never=0x7f090017;
@@ -1762,6 +1762,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
+        public static final int scrollView1=0x7f090044;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;
         public static final int search_button=0x7f090036;
@@ -1780,24 +1781,26 @@ containing a value of this type.
         public static final int submit_area=0x7f09003c;
         public static final int tabMode=0x7f09000c;
         public static final int title=0x7f090027;
-        public static final int txtDownload=0x7f090059;
-        public static final int txtLastDate=0x7f090046;
-        public static final int txtLastDateCm=0x7f090047;
-        public static final int txtLastTime=0x7f090048;
-        public static final int txtLastTimeCm=0x7f090049;
-        public static final int txtLastUse=0x7f090044;
-        public static final int txtLastUseCm=0x7f090045;
-        public static final int txtLastWifiName=0x7f09004a;
-        public static final int txtLastWifiNameCm=0x7f09004b;
-        public static final int txtMostUseFromWifi=0x7f090050;
-        public static final int txtMostUseFromWifiCm=0x7f090051;
-        public static final int txtMostUseInOne=0x7f09004c;
-        public static final int txtMostUseInOneCm=0x7f09004d;
-        public static final int txtMostUseTime=0x7f09004e;
-        public static final int txtMostUseTimeCm=0x7f09004f;
-        public static final int txtUpload=0x7f09005a;
-        public static final int txt_drawername=0x7f090052;
-        public static final int txt_head=0x7f090055;
+        public static final int txtAllUse=0x7f090053;
+        public static final int txtAllUseCm=0x7f090054;
+        public static final int txtDownload=0x7f09005c;
+        public static final int txtLastDate=0x7f090047;
+        public static final int txtLastDateCm=0x7f090048;
+        public static final int txtLastTime=0x7f090049;
+        public static final int txtLastTimeCm=0x7f09004a;
+        public static final int txtLastUse=0x7f090045;
+        public static final int txtLastUseCm=0x7f090046;
+        public static final int txtLastWifiName=0x7f09004b;
+        public static final int txtLastWifiNameCm=0x7f09004c;
+        public static final int txtMostUseFromWifi=0x7f090051;
+        public static final int txtMostUseFromWifiCm=0x7f090052;
+        public static final int txtMostUseInOne=0x7f09004d;
+        public static final int txtMostUseInOneCm=0x7f09004e;
+        public static final int txtMostUseTime=0x7f09004f;
+        public static final int txtMostUseTimeCm=0x7f090050;
+        public static final int txtUpload=0x7f09005d;
+        public static final int txt_drawername=0x7f090055;
+        public static final int txt_head=0x7f090058;
         public static final int up=0x7f090001;
         public static final int useLogo=0x7f090013;
         public static final int withText=0x7f090018;
@@ -1926,17 +1929,18 @@ containing a value of this type.
         public static final int action_bar_title=0x7f0a0013;
         public static final int action_settings=0x7f0a0012;
         public static final int activity_main_all_time=0x7f0a001c;
-        public static final int activity_main_hour=0x7f0a0020;
+        public static final int activity_main_all_uses=0x7f0a001e;
+        public static final int activity_main_hour=0x7f0a0021;
         public static final int activity_main_last_date=0x7f0a0019;
         public static final int activity_main_last_time=0x7f0a0018;
         /**  text 
          */
         public static final int activity_main_last_use=0x7f0a0017;
         public static final int activity_main_last_wifi_name=0x7f0a001a;
-        public static final int activity_main_minute=0x7f0a001f;
+        public static final int activity_main_minute=0x7f0a0020;
         public static final int activity_main_most_use=0x7f0a001b;
         public static final int activity_main_most_use_from_wifi=0x7f0a001d;
-        public static final int activity_main_second=0x7f0a001e;
+        public static final int activity_main_second=0x7f0a001f;
         /**  Drawer Items End 
          */
         public static final int app_name=0x7f0a0010;

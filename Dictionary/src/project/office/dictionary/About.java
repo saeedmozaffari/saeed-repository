@@ -19,8 +19,6 @@ public class About extends DrawerActivity {
         TextView txtAbout = (TextView) findViewById(R.id.txtAbout);
         txtAbout.setTypeface(G.persianFont);
     }
-	
-	//new comment for test git
 
 
     @Override

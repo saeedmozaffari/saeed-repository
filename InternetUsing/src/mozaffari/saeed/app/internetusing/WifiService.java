@@ -11,6 +11,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
@@ -50,6 +51,10 @@ public class WifiService extends Service {
     boolean                     connecting;
 
     private String              wifiName = "";
+
+    private int                 id;
+    private int                 beforDownload;
+    private int                 beforUpload;
 
 
     @Override
@@ -122,8 +127,17 @@ public class WifiService extends Service {
 
         } else {
 
-            detectNetworkType();
+            //============Select All befor download and upload
 
+            Cursor cursorAllUses = G.cmd.selectAllUse();
+            while (cursorAllUses.moveToNext()) {
+                id = cursorAllUses.getInt(cursorAllUses.getColumnIndex("id"));
+                beforDownload = cursorAllUses.getInt(cursorAllUses.getColumnIndex("download"));
+                beforUpload = cursorAllUses.getInt(cursorAllUses.getColumnIndex("upload"));
+            }
+            cursorAllUses.close();
+
+            detectNetworkType();
             String type = G.preferences.getString("TYPE", "");
 
             if (type.equals("wifi")) {
@@ -227,7 +241,7 @@ public class WifiService extends Service {
         int minute = G.calendar.get(Calendar.MINUTE);
         int second = G.calendar.get(Calendar.SECOND);
 
-        String wifiName = "";
+        String wifiName = "mobile_data_connection";
         String type = G.preferences.getString("TYPE", "");
         if (type.equals("wifi")) {
             wifiName = G.preferences.getString("WIFI_NAME", "");
@@ -237,14 +251,39 @@ public class WifiService extends Service {
         String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 
         if (wifiName.equals("")) { // connection was not wifi
-            G.cmd.insertUseDetails("mobile_data_connection", download, upload, date, G.duration);
+            G.cmd.insertUseDetails(wifiName, download, upload, date, G.duration);
         } else {
             G.cmd.insertUseDetails(wifiName, download, upload, date, G.duration);
+
             Log.i("LOG", "wifiName : " + wifiName);
             Log.i("LOG", "download : " + download);
             Log.i("LOG", "upload : " + upload);
             Log.i("LOG", "date : " + date);
             Log.i("LOG", "duration : " + G.duration);
+        }
+
+        boolean wifiDetailsExist = G.cmd.isExist("wifi_details", " wifi_name = '" + wifiName + "'");
+        if (wifiDetailsExist) { // update
+
+            int beforDownload = 0, beforUpload = 0;
+
+            Cursor cursorWifiDetails = G.cmd.select("*", "wifi_details", "wifi_name = '" + wifiName + "'");
+            while (cursorWifiDetails.moveToNext()) {
+                beforDownload = cursorWifiDetails.getInt(cursorWifiDetails.getColumnIndex("download"));
+                beforUpload = cursorWifiDetails.getInt(cursorWifiDetails.getColumnIndex("upload"));
+            }
+            cursorWifiDetails.close();
+
+            G.cmd.updateWifiDetails(wifiName, download + beforDownload, upload + beforUpload);
+        } else { // insert
+            G.cmd.insretWifiDetails(wifiName, download, upload);
+        }
+
+        //============plus and add to all_uses table
+        if (G.cmd.selectAllUseCount("all_uses") == 0) {
+            G.cmd.insertAllUses(download, upload);
+        } else {
+            G.cmd.updateAllUses(id, beforDownload + download, beforUpload + upload);
         }
     }
 

@@ -20,7 +20,6 @@ public class VisitSort extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-	//edit
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visit_sort);
         set();

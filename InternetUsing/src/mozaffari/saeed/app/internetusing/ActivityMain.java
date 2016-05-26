@@ -3,8 +3,9 @@ package mozaffari.saeed.app.internetusing;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.widget.TextView;
+import mozaffari.saeed.app.internetusing.helpers.HelperComputeInternt;
+import mozaffari.saeed.app.internetusing.helpers.HelperComputeTime;
 import mozaffari.saeed.app.internetusing.tools.G;
 
 
@@ -29,6 +30,8 @@ public class ActivityMain extends ActionBarActivity {
         TextView txtMostUseTimeCm = (TextView) findViewById(R.id.txtMostUseTimeCm);
         TextView txtMostUseFromWifi = (TextView) findViewById(R.id.txtMostUseFromWifi);
         TextView txtMostUseFromWifiCm = (TextView) findViewById(R.id.txtMostUseFromWifiCm);
+        TextView txtAllUse = (TextView) findViewById(R.id.txtAllUse);
+        TextView txtAllUseCm = (TextView) findViewById(R.id.txtAllUseCm);
 
         String lastDownloadUse = "";
         String lastUploadUse = "";
@@ -36,22 +39,31 @@ public class ActivityMain extends ActionBarActivity {
         String lastWifiName = "";
         String lastDuration = "";
         String allDuration = "";
-        String mostUseFromWifi = "";
         String mostUseInOne = "";
         int mostDownloadUseInOne = 0;
         int mostUploadUseUseInOne = 0;
         int lastDownload = 0;
         int lastUpload = 0;
-        int mostUse = 0;
         long allTime = 0;
         long lastTime = 0;
+
+        String allDownloadS = "";
+        String allUploadS = "";
+        int allDownload = 0;
+        int allUpload = 0;
+
+        String mostUseWifiName = "";
+        String mostUseWifiDownloadCm = "";
+        String mostUseWifiUploadCm = "";
+        int mostUseWifiDownload = 0;
+        int mostUseWifiUpload = 0;
 
         //****************************** Querys ******************************
 
         Cursor cursor = G.cmd.selectLastUsageDetails();
         while (cursor.moveToNext()) {
-            lastDownload = cursor.getInt(cursor.getColumnIndex("amount_download"));
-            lastUpload = cursor.getInt(cursor.getColumnIndex("amount_upload"));
+            lastDownload = cursor.getInt(cursor.getColumnIndex("download"));
+            lastUpload = cursor.getInt(cursor.getColumnIndex("upload"));
             lastDate = cursor.getString(cursor.getColumnIndex("use_date"));
             lastTime = cursor.getLong(cursor.getColumnIndex("duration"));
             lastWifiName = cursor.getString(cursor.getColumnIndex("wifi_name"));
@@ -67,19 +79,44 @@ public class ActivityMain extends ActionBarActivity {
 
         Cursor cursorDurations = G.cmd.selectDurations();
         while (cursorDurations.moveToNext()) {
-            getTimeDetails(cursorDurations.getInt(0));
+            HelperComputeTime.getTimeDetails(cursorDurations.getInt(0));
             allTime = allTime + cursorDurations.getInt(0);
         }
         cursorDurations.close();
 
+        Cursor cursorAllUses = G.cmd.selectAllUse();
+        while (cursorAllUses.moveToNext()) {
+            allDownload = cursorAllUses.getInt(cursorAllUses.getColumnIndex("download"));
+            allUpload = cursorAllUses.getInt(cursorAllUses.getColumnIndex("upload"));
+        }
+        cursorAllUses.close();
+
+        Cursor cursorWifiDetails = G.cmd.select("*", "wifi_details");
+        while (cursorWifiDetails.moveToNext()) {
+            String wifiName = cursorWifiDetails.getString(cursorWifiDetails.getColumnIndex("wifi_name"));
+            int download = cursorWifiDetails.getInt(cursorWifiDetails.getColumnIndex("download"));
+            int upload = cursorWifiDetails.getInt(cursorWifiDetails.getColumnIndex("upload"));
+
+            if (download > mostUseWifiDownload) {
+                mostUseWifiName = wifiName;
+                mostUseWifiDownload = download;
+                mostUseWifiUpload = upload;
+            }
+        }
+        cursorWifiDetails.close();
+
         //****************************** Preparation Values ******************************
 
-        lastDownloadUse = internetDownloadCompute(lastDownload);
-        lastUploadUse = internetUploadCompute(lastUpload);
-        mostUseInOne = internetUploadCompute(mostDownloadUseInOne) + " دانلود و " + internetUploadCompute(mostUploadUseUseInOne) + " آپلود";
+        mostUseWifiDownloadCm = HelperComputeInternt.internetUsedCompute(mostUseWifiDownload);
+        mostUseWifiUploadCm = HelperComputeInternt.internetUsedCompute(mostUseWifiUpload);
+        allDownloadS = HelperComputeInternt.internetUsedCompute(allDownload);
+        allUploadS = HelperComputeInternt.internetUsedCompute(allUpload);
+        lastDownloadUse = HelperComputeInternt.internetUsedCompute(lastDownload);
+        lastUploadUse = HelperComputeInternt.internetUsedCompute(lastUpload);
+        mostUseInOne = HelperComputeInternt.internetUsedCompute(mostDownloadUseInOne) + " دانلود و " + HelperComputeInternt.internetUsedCompute(mostUploadUseUseInOne) + " آپلود";
 
-        lastDuration = getTimeDetails(lastTime);
-        allDuration = getTimeDetails(allTime);
+        lastDuration = HelperComputeTime.getTimeDetails(lastTime);
+        allDuration = HelperComputeTime.getTimeDetails(allTime);
 
         //****************************** Set Values ******************************
 
@@ -95,75 +132,11 @@ public class ActivityMain extends ActionBarActivity {
         txtMostUseInOneCm.setText(mostUseInOne);
         txtMostUseTime.setText(getString(R.string.activity_main_all_time));
         txtMostUseTimeCm.setText(allDuration);
-        //txtMostUseFromWifi.setText(getString(R.string.activity_main_most_use_from_wifi));
-        txtMostUseFromWifi.setText("");
-        txtMostUseFromWifiCm.setText("");
+        txtMostUseFromWifi.setText(getString(R.string.activity_main_most_use_from_wifi));
+        txtMostUseFromWifiCm.setText("شما از شبکه " + mostUseWifiName + " " + mostUseWifiDownloadCm + " دانلود و " + mostUseWifiUploadCm + " آپلود داشته اید");
+        txtAllUse.setText(getString(R.string.activity_main_all_uses));
+        txtAllUseCm.setText(allDownloadS + " دانلود و " + allUploadS + " آپلود");
 
     }
 
-
-    private String getTimeDetails(long time) {
-        long milliseconds = time;
-        int seconds = (int) (milliseconds / 1000) % 60;
-        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
-        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
-
-        String duration = "";
-        String second = getString(R.string.activity_main_second);
-        String minute = getString(R.string.activity_main_minute);
-        String hour = getString(R.string.activity_main_hour);
-
-        if (hours > 0) {
-
-            if (minutes > 0) {
-                if (seconds > 0) {
-                    duration = hours + " " + hour + " " + minutes + " " + minute + " " + seconds + " " + second;
-                } else {
-                    duration = hours + " " + hour + " " + minutes + " " + minute;
-                }
-            } else {
-                duration = hours + " " + hour + " " + seconds + " " + second;
-            }
-
-        } else if (minutes > 0) {
-
-            if (seconds > 0) {
-                duration = minutes + " " + minute + " " + seconds + " " + second;
-            } else {
-                duration = minutes + " " + minute;
-            }
-
-        } else {
-            duration = seconds + " " + second;
-        }
-
-        Log.i("LOG", "DURATION : " + duration);
-        return duration;
-    }
-
-
-    private String internetDownloadCompute(int amountDownload) {
-        String download = amountDownload + " کیوبایت";
-        int downloadDivided;
-        int dataDownloadShow;
-        if (amountDownload > 1024) {
-            downloadDivided = amountDownload % 1024;
-            dataDownloadShow = amountDownload / 1024;
-            download = dataDownloadShow + " مگابایت ," + downloadDivided + " کیوبایت";
-        }
-        return download;
-    }
-
-
-    private String internetUploadCompute(int amountUpload) {
-        String upload = amountUpload + " کیوبایت";
-        int uploadDivided;
-        int dataUploadShow;
-        if (amountUpload > 1024) {
-            uploadDivided = amountUpload % 1024;
-            dataUploadShow = amountUpload / 1024;
-            upload = dataUploadShow + " مگابایت ," + uploadDivided + " کیوبایت";
-        }
-        return upload;
-    }
 }

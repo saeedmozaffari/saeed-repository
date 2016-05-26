@@ -126,6 +126,12 @@ public class SQLiteCommands extends SQLiteOpenHelper {
 
     //Select Commands
 
+    public Cursor selectBeforWifiDetails() {
+        Cursor cursor = cmd.rawQuery("SELECT * FROM wifi_details", null);
+        return cursor;
+    }
+
+
     public Cursor selectLastUsageDetails() {
         Cursor cursor = cmd.rawQuery("SELECT * FROM usage_details ORDER BY id DESC LIMIT 1 ", null);
         return cursor;
@@ -133,7 +139,7 @@ public class SQLiteCommands extends SQLiteOpenHelper {
 
 
     public Cursor selectMostUseInOneConnetion() {
-        Cursor cursor = cmd.rawQuery("SELECT amount_download,amount_upload FROM usage_details ORDER BY amount_download DESC LIMIT 1 ", null);
+        Cursor cursor = cmd.rawQuery("SELECT download,upload FROM usage_details ORDER BY download DESC LIMIT 1 ", null);
         return cursor;
     }
 
@@ -145,7 +151,57 @@ public class SQLiteCommands extends SQLiteOpenHelper {
 
 
     public Cursor selectAllUse() {
-        Cursor cursor = cmd.rawQuery("SELECT wifi_name,amount_download,amount_upload FROM usage_details", null);
+        Cursor cursor = cmd.rawQuery("SELECT * FROM all_uses", null);
+        return cursor;
+    }
+
+
+    public int selectAllUseCount(String table) {
+        Cursor cursor = cmd.rawQuery("SELECT * FROM " + table, null);
+        int count = cursor.getCount();
+        return count;
+    }
+
+
+    public int selectCountWithClause(String table, String clause) {
+        Cursor mCount = cmd.rawQuery("SELECT COUNT(*) FROM " + table + " where " + clause, null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
+
+    public int selectCountWithoutClause(String table) {
+        Cursor mCount = cmd.rawQuery("SELECT COUNT(*) FROM " + table, null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
+
+    public boolean isExist(String table, String clause) {
+        Cursor mCount = cmd.rawQuery("SELECT COUNT(*) FROM " + table + " where " + clause, null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        if (count == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    public Cursor select(String what, String table) {
+        Cursor cursor = cmd.rawQuery("SELECT " + what + " FROM " + table, null);
+        return cursor;
+    }
+
+
+    public Cursor select(String what, String table, String cluase) {
+        Cursor cursor = cmd.rawQuery("SELECT " + what + " FROM " + table + " WHERE " + cluase, null);
         return cursor;
     }
 
@@ -159,31 +215,49 @@ public class SQLiteCommands extends SQLiteOpenHelper {
 
     //Insert Commands
 
+    public void insertAllUses(int download, int upload) {
+        ContentValues values = new ContentValues();
+        values.put("download", download);
+        values.put("upload", upload);
+        cmd.insert("all_uses", null, values);
+    }
+
+
     public void insertUseDetails(String wifiName, int download, int upload, String date, long duration) {
         ContentValues values = new ContentValues();
         values.put("wifi_name", wifiName);
-        values.put("amount_download", download);
-        values.put("amount_upload", upload);
+        values.put("download", download);
+        values.put("upload", upload);
         values.put("use_date", date);
         values.put("duration", duration);
         cmd.insert("usage_details", null, values);
     }
 
 
-    public void insertFavorite(String word, String mean, int wordID) {
+    public void insretWifiDetails(String wifiName, int download, int upload) {
         ContentValues values = new ContentValues();
-        values.put("word", word);
-        values.put("mean", mean);
-        values.put("word_id", wordID);
-        cmd.insert("fav_word", null, values);
+        values.put("wifi_name", wifiName);
+        values.put("download", download);
+        values.put("upload", upload);
+        cmd.insert("wifi_details", null, values);
     }
 
 
     //Update Commands
 
-    public void updatetasvir(String tasvir) {
-        ContentValues cv = new ContentValues();
-        cv.put("tasvir", tasvir);
-        cmd.update("login", cv, null, null);
+    public void updateWifiDetails(String wifiName, int download, int upload) {
+        ContentValues values = new ContentValues();
+        values.put("download", download);
+        values.put("upload", upload);
+        cmd.update("wifi_details", values, " wifi_name = '" + wifiName + "'", null);
     }
+
+
+    public void updateAllUses(int id, int download, int upload) {
+        ContentValues values = new ContentValues();
+        values.put("download", download);
+        values.put("upload", upload);
+        cmd.update("all_uses", values, "id = '" + id + "'", null);
+    }
+
 }

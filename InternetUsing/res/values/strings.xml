@@ -31,6 +31,7 @@
     <string name="activity_main_most_use">بیشترین میزان مصرف در یک اتصال</string>
     <string name="activity_main_all_time">مدت کلی اتصال</string>
     <string name="activity_main_most_use_from_wifi">بیشترین میزان مصرف از یک شبکه</string>
+    <string name="activity_main_all_uses">مجموع مصرف شما</string>
     <string name="activity_main_second">ثانیه</string>
     <string name="activity_main_minute">دقیقه و</string>
     <string name="activity_main_hour">ساعت و</string>
