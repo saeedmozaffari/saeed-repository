@@ -18,12 +18,13 @@
     <string name="action_settings">Settings</string>
     <string name="action_bar_title">ActionBar Title</string>
     <string name="drawer_title">title</string>
-    
+
     <!-- layout strings -->
     <string name="drawer_nav_head">Nav Head</string>
     <string name="drawer_head_title">drawer title</string>
-    
+
     <!-- text -->
+    <string name="activity_main_use_internet">نمایش مصرف اینترنت</string>
     <string name="activity_main_last_use">آخرین مصرف</string>
     <string name="activity_main_last_time">آخرین مدت اتصال</string>
     <string name="activity_main_last_date">آخرین تاریخ اتصال</string>
@@ -35,5 +36,8 @@
     <string name="activity_main_second">ثانیه</string>
     <string name="activity_main_minute">دقیقه و</string>
     <string name="activity_main_hour">ساعت و</string>
+    <string name="title_activity_activity_all_use_details">ActivityAllUseDetails</string>
+    <string name="title_activity_activity_wifi_use_details">ActivityWifiUseDetails</string>
+    <string name="title_activity_activity_limitation">ActivityLimitation</string>
 
 </resources>

@@ -126,6 +126,17 @@ public class SQLiteCommands extends SQLiteOpenHelper {
 
     //Select Commands
 
+    public Cursor selectInternetUsage(String fromDate, String toDate) {
+        //        select column from Table where columnDate between '2012-07-01' and '2012-07-07'
+        //        Cursor cursor = cmd.rawQuery("SELECT download , upload FROM usage_details WHERE use_date_stop BETWEEN " + fromDate + " AND " + toDate, null);
+        //        Cursor cursor = cmd.rawQuery("SELECT download , upload FROM usage_details WHERE use_date_stop BETWEEN Datetime('" + fromDate + "') AND Datetime('" + toDate + "') ", null);
+        //        Cursor cursor = cmd.rawQuery("SELECT download , upload FROM usage_details WHERE Datetime('use_date_stop') >= Datetime('" + fromDate + "') AND Datetime('use_date_stop') <= Datetime('" + toDate + "') ", null);
+        //        Cursor cursor = cmd.rawQuery("SELECT download , upload FROM usage_details WHERE use_date_stop BETWEEN strftime('%s', '" + fromDate + "') AND strftime('%s', '" + toDate + "')", null);
+        Cursor cursor = cmd.rawQuery("SELECT download , upload FROM usage_details WHERE use_date_stop >= " + fromDate + " AND use_date_stop <= " + toDate, null);
+        return cursor;
+    }
+
+
     public Cursor selectBeforWifiDetails() {
         Cursor cursor = cmd.rawQuery("SELECT * FROM wifi_details", null);
         return cursor;
@@ -223,12 +234,13 @@ public class SQLiteCommands extends SQLiteOpenHelper {
     }
 
 
-    public void insertUseDetails(String wifiName, int download, int upload, String date, long duration) {
+    public void insertUseDetails(String wifiName, int download, int upload, String dateStart, String dateStop, long duration) {
         ContentValues values = new ContentValues();
         values.put("wifi_name", wifiName);
         values.put("download", download);
         values.put("upload", upload);
-        values.put("use_date", date);
+        values.put("use_date_start", dateStart);
+        values.put("use_date_stop", dateStop);
         values.put("duration", duration);
         cmd.insert("usage_details", null, values);
     }

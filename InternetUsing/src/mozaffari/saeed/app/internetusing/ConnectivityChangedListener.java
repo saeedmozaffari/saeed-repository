@@ -6,10 +6,11 @@ import java.net.URL;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import mozaffari.saeed.app.internetusing.helpers.HelperChangePreference;
+import mozaffari.saeed.app.internetusing.helpers.HelperComputeTime;
 import mozaffari.saeed.app.internetusing.tools.G;
 
 
@@ -24,15 +25,23 @@ public class ConnectivityChangedListener extends BroadcastReceiver {
             public void run() {
 
                 if (hasActiveInternetConnection()) {
-                    changeLongPreference("START_MILLIS", System.currentTimeMillis());
+                    HelperChangePreference.changePreference("SHOW_LIMITATION_ALERT", true); // prepreation for show alert
+                    HelperChangePreference.changePreference("START_MILLIS", System.currentTimeMillis());
+                    HelperChangePreference.changePreference("START_DATE", HelperComputeTime.getCurrentDateNumerical());
+
+                    Intent service = new Intent(G.context, WifiService.class);
+                    G.context.startService(service);
+
+                    G.runService = false;
                 } else {
-                    //changeLongPreference("END_MILLIS", System.currentTimeMillis());
                     G.duration = System.currentTimeMillis() - G.preferences.getLong("START_MILLIS", 0);
 
+                    if ( !G.runService) {
+                        G.runService = true;
+                        Intent service = new Intent(G.context, WifiService.class);
+                        G.context.startService(service);
+                    }
                 }
-
-                Intent service = new Intent(G.context, WifiService.class);
-                G.context.startService(service);
             }
         });
         thread.start();
@@ -61,12 +70,5 @@ public class ConnectivityChangedListener extends BroadcastReceiver {
             Log.d("LOGA", "No network available!");
         }
         return false;
-    }
-
-
-    private void changeLongPreference(String key, long lastContent) {
-        SharedPreferences.Editor editor = G.preferences.edit();
-        editor.putLong(key, lastContent);
-        editor.commit();
     }
 }

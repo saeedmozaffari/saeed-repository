@@ -25,6 +25,7 @@ public class G extends Application {
     public static SharedPreferences preferences;
     public static Calendar          calendar;
     public static long              duration;
+    public static boolean           runService = false;
 
 
     @Override

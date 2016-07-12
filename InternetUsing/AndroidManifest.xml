@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -38,6 +40,19 @@
         </receiver>
 
         <service android:name=".WifiService" />
+
+        <activity
+            android:name=".ActivityAllUseDetails"
+            android:label="@string/title_activity_activity_all_use_details" >
+        </activity>
+        <activity
+            android:name=".ActivityWifiUseDetails"
+            android:label="@string/title_activity_activity_wifi_use_details" >
+        </activity>
+        <activity
+            android:name=".ActivityLimitation"
+            android:label="@string/title_activity_activity_limitation" >
+        </activity>
     </application>
 
 </manifest>

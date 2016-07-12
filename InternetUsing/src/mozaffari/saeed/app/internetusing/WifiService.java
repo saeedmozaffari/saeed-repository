@@ -3,14 +3,14 @@ package mozaffari.saeed.app.internetusing;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,8 +18,12 @@ import android.net.TrafficStats;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
+import mozaffari.saeed.app.internetusing.helpers.HelperChangePreference;
+import mozaffari.saeed.app.internetusing.helpers.HelperComputeTime;
 import mozaffari.saeed.app.internetusing.tools.G;
 
 
@@ -50,11 +54,18 @@ public class WifiService extends Service {
     boolean                     connect;
     boolean                     connecting;
 
-    private String              wifiName = "";
-
     private int                 id;
     private int                 beforDownload;
     private int                 beforUpload;
+
+    private int                 daily;
+    private int                 monthly;
+    private int                 eachUse;
+    private int                 dataDaily;
+    private int                 dataMonthly;
+    private int                 dataEachUse;
+
+    private String              endLimitaionState;
 
 
     @Override
@@ -64,6 +75,7 @@ public class WifiService extends Service {
 
             @Override
             public void run() {
+                getLimitationValue();
                 createNotification();
             }
         });
@@ -83,13 +95,11 @@ public class WifiService extends Service {
 
         int used = G.preferences.getInt("ALL_CONTENT", 0);
         if (used == 0) {
-
             lastContentDownload = TrafficStats.getTotalRxBytes();
             lastContentUpload = TrafficStats.getTotalTxBytes();
-            //Log.i("LOG", "firstContent : " + TrafficStats.getTotalRxBytes() / 1024);
-            changePreference("LAST_DOWNLOAD", (int) lastContentDownload);
-            changePreference("LAST_UPLOAD", (int) lastContentUpload);
-            changePreference("ALL_CONTENT", 1);
+            HelperChangePreference.changePreference("LAST_DOWNLOAD", (int) lastContentDownload);
+            HelperChangePreference.changePreference("LAST_UPLOAD", (int) lastContentUpload);
+            HelperChangePreference.changePreference("ALL_CONTENT", 1);
         }
 
         conectivityManager = (ConnectivityManager) G.context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -119,7 +129,7 @@ public class WifiService extends Service {
 
             //superToast(4000, "Connection Failed    \n\n" + "Last Download : " + notificationDownload + "\n\nLast Upload : " + notificationUpload + "   ", SuperToast.Animations.FLYIN);
 
-            changePreference("ALL_CONTENT", 0);
+            HelperChangePreference.changePreference("ALL_CONTENT", 0);
             notificationManager.cancel(NOTIFICATION_ID);
             insertToDatabase();
             Intent servicea = new Intent(G.context, WifiService.class);
@@ -141,7 +151,7 @@ public class WifiService extends Service {
             String type = G.preferences.getString("TYPE", "");
 
             if (type.equals("wifi")) {
-                changeStringPreference("WIFI_NAME", getWifiName());
+                HelperChangePreference.changePreference("WIFI_NAME", getWifiName());
             }
 
             while (true) {
@@ -155,7 +165,7 @@ public class WifiService extends Service {
                         notificationView.setTextViewText(R.id.txtUpload, "Upload : " + notificationUpload);
                         notificationManager.notify(NOTIFICATION_ID, notification);
 
-                        //alertForUse();
+                        alertForUse();
                     }
                 }
                 try {
@@ -177,31 +187,31 @@ public class WifiService extends Service {
                 if (network.getType() == ConnectivityManager.TYPE_WIFI) {
                     if (network.isConnected() && network.isAvailable()) {
                         Log.i("CONNECTION", "wifi connected");
-                        changeStringPreference("TYPE", "wifi");
+                        HelperChangePreference.changePreference("TYPE", "wifi");
                     }
                 }
                 if (network.getType() == ConnectivityManager.TYPE_MOBILE) {
                     if (network.isConnected() && network.isAvailable()) {
                         Log.i("CONNECTION", "mobile data connected");
-                        changeStringPreference("TYPE", "data");
+                        HelperChangePreference.changePreference("TYPE", "data");
                     }
                 }
                 if (network.getType() == ConnectivityManager.TYPE_ETHERNET) {
                     if (network.isConnected() && network.isAvailable()) {
                         Log.i("CONNECTION", "ethernet connected");
-                        changeStringPreference("TYPE", "ethernet");
+                        HelperChangePreference.changePreference("TYPE", "ethernet");
                     }
                 }
                 if (network.getType() == ConnectivityManager.TYPE_WIMAX) {
                     if (network.isConnected() && network.isAvailable()) {
                         Log.i("CONNECTION", "wimax connected");
-                        changeStringPreference("TYPE", "wimax");
+                        HelperChangePreference.changePreference("TYPE", "wimax");
                     }
                 }
                 if (network.getType() == ConnectivityManager.TYPE_BLUETOOTH) {
                     if (network.isConnected() && network.isAvailable()) {
                         Log.i("CONNECTION", "bluetooth connected");
-                        changeStringPreference("TYPE", "blutooth");
+                        HelperChangePreference.changePreference("TYPE", "blutooth");
                     }
                 }
             }
@@ -232,15 +242,6 @@ public class WifiService extends Service {
 
     private void insertToDatabase() {
 
-        Log.i("LOG", "insert");
-        //yyyy-MM-dd HH:mm:ss ==> date insert format
-        int year = G.calendar.get(Calendar.YEAR);
-        int month = G.calendar.get(Calendar.MONTH);
-        int day = G.calendar.get(Calendar.DAY_OF_MONTH);
-        int hour = G.calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = G.calendar.get(Calendar.MINUTE);
-        int second = G.calendar.get(Calendar.SECOND);
-
         String wifiName = "mobile_data_connection";
         String type = G.preferences.getString("TYPE", "");
         if (type.equals("wifi")) {
@@ -248,18 +249,13 @@ public class WifiService extends Service {
         }
         int download = G.preferences.getInt("DOWNLOAD", 0);
         int upload = G.preferences.getInt("UPLOAD", 0);
-        String date = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        String dateStop = HelperComputeTime.getCurrentDateNumerical();
+        String dateStart = G.preferences.getString("START_DATE", "");
 
         if (wifiName.equals("")) { // connection was not wifi
-            G.cmd.insertUseDetails(wifiName, download, upload, date, G.duration);
+            G.cmd.insertUseDetails(wifiName, download, upload, dateStart, dateStop, G.duration);
         } else {
-            G.cmd.insertUseDetails(wifiName, download, upload, date, G.duration);
-
-            Log.i("LOG", "wifiName : " + wifiName);
-            Log.i("LOG", "download : " + download);
-            Log.i("LOG", "upload : " + upload);
-            Log.i("LOG", "date : " + date);
-            Log.i("LOG", "duration : " + G.duration);
+            G.cmd.insertUseDetails(wifiName, download, upload, dateStart, dateStop, G.duration);
         }
 
         boolean wifiDetailsExist = G.cmd.isExist("wifi_details", " wifi_name = '" + wifiName + "'");
@@ -305,7 +301,7 @@ public class WifiService extends Service {
         if (finalDownload >= 0) {
             oldDataDownload = dataDownload;
             databaseDownload += finalDownload;
-            changePreference("DOWNLOAD", (int) databaseDownload);
+            HelperChangePreference.changePreference("DOWNLOAD", (int) databaseDownload);
             notificationDownload = databaseDownload + " Kb";
             if (databaseDownload > 1024) {
                 downloadDivided = databaseDownload % 1024;
@@ -322,7 +318,7 @@ public class WifiService extends Service {
         if (finalUpload >= 0) {
             oldDataUpload = dataUpload;
             databaseUpload += finalUpload;
-            changePreference("UPLOAD", (int) databaseUpload);
+            HelperChangePreference.changePreference("UPLOAD", (int) databaseUpload);
             notificationUpload = databaseUpload + " Kb";
             if (databaseUpload > 1024) {
                 uploadDivided = databaseUpload % 1024;
@@ -332,15 +328,144 @@ public class WifiService extends Service {
         }
     }
 
-    //    private void alertForUse() {
-    //        if (downloadMB >= 1 & G.toast == 1) {
-    //            superToast(2000, "10 MB Downloaded !", SuperToast.Animations.FADE);
-    //            G.toast = 2;
-    //        } else if (downloadMB >= 2 & G.toast == 2) {
-    //            superToast(2000, "20 MB Downloaded !", SuperToast.Animations.FADE);
-    //            G.toast = 10;
-    //        }
-    //    }
+
+    private void alertForUse() {
+
+        G.preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean showAlert = G.preferences.getBoolean("SHOW_LIMITATION_ALERT", true);
+
+        Log.i("LOG", "showAlert : " + showAlert);
+        Log.i("LOG", "uploadMB : " + uploadMB);
+        Log.i("LOG", "daily : " + daily);
+
+        if (showAlert) {
+
+            //            endLimitaionState = "روزانه";
+            //            dialog();
+
+            if (daily != 0 && daily > downloadMB) {
+                endLimitaionState = "روزانه";
+            }
+            if (monthly != 0 && monthly < downloadMB) {
+                endLimitaionState = "ماهانه";
+                dialog();
+            }
+
+            Log.i("LOG", "each use : " + eachUse + "  ||  Download : " + downloadMB);
+
+            if (eachUse != 0 && eachUse < downloadMB) {
+                endLimitaionState = "هر استفاده";
+                dialog();
+            }
+
+            if (dataDaily != 0 && dataDaily < downloadMB) {
+                endLimitaionState = "روزانه";
+                dialog();
+            }
+            if (dataMonthly != 0 && dataMonthly < downloadMB) {
+                endLimitaionState = "ماهانه";
+                dialog();
+            }
+            if (dataEachUse != 0 && dataEachUse < downloadMB) {
+                endLimitaionState = "هر استفاده";
+                dialog();
+            }
+        } else {
+            Log.i("LOG", "Can't show alert!");
+        }
+    }
+
+
+    private void getLimitationValue() {
+        Log.i("LOG", "getLimitationValue");
+        daily = G.preferences.getInt("WIFI_DAILY", 0);
+        monthly = G.preferences.getInt("WIFI_MONTHLY", 0);
+        eachUse = G.preferences.getInt("WIFI_EACH_USE", 0);
+        dataDaily = G.preferences.getInt("DATA_DAILY", 0);
+        dataMonthly = G.preferences.getInt("DATA_MONTHLY", 0);
+        dataEachUse = G.preferences.getInt("DATA_EACH_USE", 0);
+
+        Log.i("LOG", "eachUse : " + eachUse);
+    }
+
+
+    private void dialog() {
+        HelperChangePreference.changePreference("SHOW_LIMITATION_ALERT", false);
+        /*
+        G.handler.post(new Runnable() {
+        
+            @Override
+            public void run() {
+                Toast.makeText(G.context, "محدودیت " + endLimitaionState + " تعیین شده برای مصرف اینترنت به اتمام رسیده !" + "\n" + "آیا مایل به ادامه مصرف هستید ؟", Toast.LENGTH_LONG).show();
+            }
+        });
+        */
+
+        /*
+        G.handler.post(new Runnable() {
+            
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(G.context);
+                builder.setMessage("محدودیت " + endLimitaionState + " تعیین شده برای مصرف اینترنت به اتمام رسیده !" + "\n" + "آیا مایل به ادامه مصرف هستید ؟");
+                builder.setCancelable(true);
+                
+                builder.setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                    
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                
+                builder.setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                    
+                    public void onClick(DialogInterface dialog, int id) {
+                        wifiState(false);
+                        dialog.cancel();
+                    }
+                });
+                
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
+        */
+
+        G.handler.post(new Runnable() {
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void run() {
+                final AlertDialog builder = new AlertDialog.Builder(G.context).create();
+                builder.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                builder.setMessage("محدودیت " + endLimitaionState + " تعیین شده برای مصرف اینترنت به اتمام رسیده !" + "\n" + "آیا مایل به ادامه مصرف هستید ؟");
+                builder.setCancelable(true);
+
+                builder.setButton("بله", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        builder.cancel();
+                    }
+                });
+
+                builder.setButton2("خیر", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        wifiState(false);
+                        builder.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
+
+    }
+
+
+    private void wifiState(boolean value) {
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(value);
+    }
 
     //    private void superToast(final int time, final String text, final Animations animation) {
     //        G.handler.post(new Runnable() {
@@ -359,19 +484,5 @@ public class WifiService extends Service {
     //        });
     //
     //    }
-
-
-    private void changePreference(String key, int lastContent) {
-        SharedPreferences.Editor editor = G.preferences.edit();
-        editor.putInt(key, lastContent);
-        editor.commit();
-    }
-
-
-    private void changeStringPreference(String key, String value) {
-        SharedPreferences.Editor editor = G.preferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
 
 }
